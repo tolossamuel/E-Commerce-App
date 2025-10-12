@@ -8,7 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState>{
   final AuthUsercase authUsercase;
   AuthBloc({required this.authUsercase}):super(AuthIntialState()){
-
+    String userName = "";
+    String password = "";
     on<LogOutAuthEvent>(
       (event,emit) async {
         emit(AuthLoaddingState());
@@ -24,7 +25,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
       }
     );
     on<IsLoginAuthEvent>(
+      
       (event, emit) async {
+        emit(AuthIntialState());
+        if (userName.isEmpty){
+          emit(AuthInputError(message: "Username is required", type: "username"));
+          return;
+        }
+        if (password.isEmpty){
+          emit(AuthInputError(message: "Password is required", type: "password"));
+          return;
+        }
         emit(AuthLoaddingState());
         final result = await authUsercase.isLoggin();
 
@@ -32,6 +43,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
           (ifLeft){
             emit(AuthErrorState(message: ifLeft.message));
           }, (ifRight) {
+            userName = "";
+            password = "";
             emit(AuthLogInState());
           });
       }
@@ -47,6 +60,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
           }, (isRight){
             emit(AuthLogInState());
           });
+      }
+    );
+
+    on<InputEvent>(
+      (event, emit){
+        if (event.type == "username") {
+          userName = event.input;
+        } else if (event.type == "password"){
+          password = event.input;
+        }
+      }
+    );
+    on<ClearInputEvent>(
+      (event, emit){
+        userName = "";
+        password = "";
       }
     );
   }
