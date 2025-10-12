@@ -12,8 +12,8 @@ class AuthUsercase {
     required this.authRepo
   });
 
-  Future<Either<Failure, AuthEntity>> login(String email, String password) async {
-    return await authRepo.login(email, password);
+  Future<Either<Failure, AuthEntity>> login(String userName, String password) async {
+    return await authRepo.login(userName, password);
   }
 
   Future<Either<Failure, bool>> logOut() async {

@@ -24,7 +24,7 @@ class AuthRepoImpl extends AuthRepo {
   }
 
   @override
-  Future<Either<Failure, AuthEntity>> login(String email, String password) async{
-    return await authDataSource.logIn(email, password);
+  Future<Either<Failure, AuthEntity>> login(String userName, String password) async{
+    return await authDataSource.logIn(userName, password);
   }
 }

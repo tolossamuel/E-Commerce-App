@@ -1,12 +1,18 @@
 
-class AuthEntity {
+import 'package:equatable/equatable.dart';
+
+class AuthEntity  extends Equatable{
   final String token;
-  final String email;
-  final String userId;
+  final String userName;
+  
   AuthEntity({
     required this.token,
-    required this.email,
-    required this.userId
+    required this.userName,
+   
   });
+  
+  @override
+  // TODO: implement props
+  List<Object?> get props => [token,userName];
   
 }

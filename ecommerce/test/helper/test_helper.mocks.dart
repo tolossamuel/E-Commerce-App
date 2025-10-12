@@ -3,19 +3,23 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
-import 'dart:convert' as _i9;
-import 'dart:typed_data' as _i11;
+import 'dart:async' as _i6;
+import 'dart:convert' as _i12;
+import 'dart:typed_data' as _i14;
 
 import 'package:dartz/dartz.dart' as _i2;
-import 'package:ecommerce/core/failure/failure.dart' as _i6;
+import 'package:ecommerce/core/failure/failure.dart' as _i7;
+import 'package:ecommerce/core/network_checker/network_checker.dart' as _i10;
 import 'package:ecommerce/feature/auth/data/data_source/auth_data_source.dart'
-    as _i8;
-import 'package:ecommerce/feature/auth/domain/entity/auth_entity.dart' as _i7;
-import 'package:ecommerce/feature/auth/domain/repo/auth_repo.dart' as _i4;
-import 'package:http/http.dart' as _i3;
+    as _i9;
+import 'package:ecommerce/feature/auth/domain/entity/auth_entity.dart' as _i8;
+import 'package:ecommerce/feature/auth/domain/repo/auth_repo.dart' as _i5;
+import 'package:http/http.dart' as _i4;
+import 'package:internet_connection_checker/internet_connection_checker.dart'
+    as _i3;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i10;
+import 'package:mockito/src/dummies.dart' as _i13;
+import 'package:shared_preferences/shared_preferences.dart' as _i11;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -37,161 +41,318 @@ class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
     : super(parent, parentInvocation);
 }
 
-class _FakeResponse_1 extends _i1.SmartFake implements _i3.Response {
-  _FakeResponse_1(Object parent, Invocation parentInvocation)
+class _FakeInternetConnectionChecker_1 extends _i1.SmartFake
+    implements _i3.InternetConnectionChecker {
+  _FakeInternetConnectionChecker_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeStreamedResponse_2 extends _i1.SmartFake
-    implements _i3.StreamedResponse {
-  _FakeStreamedResponse_2(Object parent, Invocation parentInvocation)
+class _FakeResponse_2 extends _i1.SmartFake implements _i4.Response {
+  _FakeResponse_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeStreamedResponse_3 extends _i1.SmartFake
+    implements _i4.StreamedResponse {
+  _FakeStreamedResponse_3(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
 /// A class which mocks [AuthRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthRepo extends _i1.Mock implements _i4.AuthRepo {
+class MockAuthRepo extends _i1.Mock implements _i5.AuthRepo {
   MockAuthRepo() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<_i2.Either<_i6.Failure, _i7.AuthEntity>> login(
+  _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>> login(
     String? email,
     String? password,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#login, [email, password]),
             returnValue:
-                _i5.Future<_i2.Either<_i6.Failure, _i7.AuthEntity>>.value(
-                  _FakeEither_0<_i6.Failure, _i7.AuthEntity>(
+                _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>>.value(
+                  _FakeEither_0<_i7.Failure, _i8.AuthEntity>(
                     this,
                     Invocation.method(#login, [email, password]),
                   ),
                 ),
           )
-          as _i5.Future<_i2.Either<_i6.Failure, _i7.AuthEntity>>);
+          as _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>>);
 
   @override
-  _i5.Future<_i2.Either<_i6.Failure, bool>> logOut() =>
+  _i6.Future<_i2.Either<_i7.Failure, bool>> logOut() =>
       (super.noSuchMethod(
             Invocation.method(#logOut, []),
-            returnValue: _i5.Future<_i2.Either<_i6.Failure, bool>>.value(
-              _FakeEither_0<_i6.Failure, bool>(
+            returnValue: _i6.Future<_i2.Either<_i7.Failure, bool>>.value(
+              _FakeEither_0<_i7.Failure, bool>(
                 this,
                 Invocation.method(#logOut, []),
               ),
             ),
           )
-          as _i5.Future<_i2.Either<_i6.Failure, bool>>);
+          as _i6.Future<_i2.Either<_i7.Failure, bool>>);
 
   @override
-  _i5.Future<_i2.Either<_i6.Failure, bool>> isLoggin() =>
+  _i6.Future<_i2.Either<_i7.Failure, bool>> isLoggin() =>
       (super.noSuchMethod(
             Invocation.method(#isLoggin, []),
-            returnValue: _i5.Future<_i2.Either<_i6.Failure, bool>>.value(
-              _FakeEither_0<_i6.Failure, bool>(
+            returnValue: _i6.Future<_i2.Either<_i7.Failure, bool>>.value(
+              _FakeEither_0<_i7.Failure, bool>(
                 this,
                 Invocation.method(#isLoggin, []),
               ),
             ),
           )
-          as _i5.Future<_i2.Either<_i6.Failure, bool>>);
+          as _i6.Future<_i2.Either<_i7.Failure, bool>>);
 }
 
 /// A class which mocks [AuthDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthDataSource extends _i1.Mock implements _i8.AuthDataSource {
+class MockAuthDataSource extends _i1.Mock implements _i9.AuthDataSource {
   MockAuthDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<_i2.Either<_i6.Failure, bool>> isLoggin() =>
+  _i6.Future<_i2.Either<_i7.Failure, bool>> isLoggin() =>
       (super.noSuchMethod(
             Invocation.method(#isLoggin, []),
-            returnValue: _i5.Future<_i2.Either<_i6.Failure, bool>>.value(
-              _FakeEither_0<_i6.Failure, bool>(
+            returnValue: _i6.Future<_i2.Either<_i7.Failure, bool>>.value(
+              _FakeEither_0<_i7.Failure, bool>(
                 this,
                 Invocation.method(#isLoggin, []),
               ),
             ),
           )
-          as _i5.Future<_i2.Either<_i6.Failure, bool>>);
+          as _i6.Future<_i2.Either<_i7.Failure, bool>>);
 
   @override
-  _i5.Future<_i2.Either<_i6.Failure, bool>> logOut() =>
+  _i6.Future<_i2.Either<_i7.Failure, bool>> logOut() =>
       (super.noSuchMethod(
             Invocation.method(#logOut, []),
-            returnValue: _i5.Future<_i2.Either<_i6.Failure, bool>>.value(
-              _FakeEither_0<_i6.Failure, bool>(
+            returnValue: _i6.Future<_i2.Either<_i7.Failure, bool>>.value(
+              _FakeEither_0<_i7.Failure, bool>(
                 this,
                 Invocation.method(#logOut, []),
               ),
             ),
           )
-          as _i5.Future<_i2.Either<_i6.Failure, bool>>);
+          as _i6.Future<_i2.Either<_i7.Failure, bool>>);
 
   @override
-  _i5.Future<_i2.Either<_i6.Failure, _i7.AuthEntity>> logIn(
+  _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>> logIn(
     String? email,
     String? password,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#logIn, [email, password]),
             returnValue:
-                _i5.Future<_i2.Either<_i6.Failure, _i7.AuthEntity>>.value(
-                  _FakeEither_0<_i6.Failure, _i7.AuthEntity>(
+                _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>>.value(
+                  _FakeEither_0<_i7.Failure, _i8.AuthEntity>(
                     this,
                     Invocation.method(#logIn, [email, password]),
                   ),
                 ),
           )
-          as _i5.Future<_i2.Either<_i6.Failure, _i7.AuthEntity>>);
+          as _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>>);
+}
+
+/// A class which mocks [NetworkInfoImpl].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNetworkInfoImpl extends _i1.Mock implements _i10.NetworkInfoImpl {
+  MockNetworkInfoImpl() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.InternetConnectionChecker get connectionChecker =>
+      (super.noSuchMethod(
+            Invocation.getter(#connectionChecker),
+            returnValue: _FakeInternetConnectionChecker_1(
+              this,
+              Invocation.getter(#connectionChecker),
+            ),
+          )
+          as _i3.InternetConnectionChecker);
+
+  @override
+  _i6.Future<bool> get isConnected =>
+      (super.noSuchMethod(
+            Invocation.getter(#isConnected),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+}
+
+/// A class which mocks [SharedPreferences].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSharedPreferences extends _i1.Mock implements _i11.SharedPreferences {
+  MockSharedPreferences() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  Set<String> getKeys() =>
+      (super.noSuchMethod(
+            Invocation.method(#getKeys, []),
+            returnValue: <String>{},
+          )
+          as Set<String>);
+
+  @override
+  Object? get(String? key) =>
+      (super.noSuchMethod(Invocation.method(#get, [key])) as Object?);
+
+  @override
+  bool? getBool(String? key) =>
+      (super.noSuchMethod(Invocation.method(#getBool, [key])) as bool?);
+
+  @override
+  int? getInt(String? key) =>
+      (super.noSuchMethod(Invocation.method(#getInt, [key])) as int?);
+
+  @override
+  double? getDouble(String? key) =>
+      (super.noSuchMethod(Invocation.method(#getDouble, [key])) as double?);
+
+  @override
+  String? getString(String? key) =>
+      (super.noSuchMethod(Invocation.method(#getString, [key])) as String?);
+
+  @override
+  bool containsKey(String? key) =>
+      (super.noSuchMethod(
+            Invocation.method(#containsKey, [key]),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  List<String>? getStringList(String? key) =>
+      (super.noSuchMethod(Invocation.method(#getStringList, [key]))
+          as List<String>?);
+
+  @override
+  _i6.Future<bool> setBool(String? key, bool? value) =>
+      (super.noSuchMethod(
+            Invocation.method(#setBool, [key, value]),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> setInt(String? key, int? value) =>
+      (super.noSuchMethod(
+            Invocation.method(#setInt, [key, value]),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> setDouble(String? key, double? value) =>
+      (super.noSuchMethod(
+            Invocation.method(#setDouble, [key, value]),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> setString(String? key, String? value) =>
+      (super.noSuchMethod(
+            Invocation.method(#setString, [key, value]),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> setStringList(String? key, List<String>? value) =>
+      (super.noSuchMethod(
+            Invocation.method(#setStringList, [key, value]),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> remove(String? key) =>
+      (super.noSuchMethod(
+            Invocation.method(#remove, [key]),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> commit() =>
+      (super.noSuchMethod(
+            Invocation.method(#commit, []),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<bool> clear() =>
+      (super.noSuchMethod(
+            Invocation.method(#clear, []),
+            returnValue: _i6.Future<bool>.value(false),
+          )
+          as _i6.Future<bool>);
+
+  @override
+  _i6.Future<void> reload() =>
+      (super.noSuchMethod(
+            Invocation.method(#reload, []),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
 }
 
 /// A class which mocks [Client].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockClient extends _i1.Mock implements _i3.Client {
+class MockClient extends _i1.Mock implements _i4.Client {
   MockClient() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<_i3.Response> head(Uri? url, {Map<String, String>? headers}) =>
+  _i6.Future<_i4.Response> head(Uri? url, {Map<String, String>? headers}) =>
       (super.noSuchMethod(
             Invocation.method(#head, [url], {#headers: headers}),
-            returnValue: _i5.Future<_i3.Response>.value(
-              _FakeResponse_1(
+            returnValue: _i6.Future<_i4.Response>.value(
+              _FakeResponse_2(
                 this,
                 Invocation.method(#head, [url], {#headers: headers}),
               ),
             ),
           )
-          as _i5.Future<_i3.Response>);
+          as _i6.Future<_i4.Response>);
 
   @override
-  _i5.Future<_i3.Response> get(Uri? url, {Map<String, String>? headers}) =>
+  _i6.Future<_i4.Response> get(Uri? url, {Map<String, String>? headers}) =>
       (super.noSuchMethod(
             Invocation.method(#get, [url], {#headers: headers}),
-            returnValue: _i5.Future<_i3.Response>.value(
-              _FakeResponse_1(
+            returnValue: _i6.Future<_i4.Response>.value(
+              _FakeResponse_2(
                 this,
                 Invocation.method(#get, [url], {#headers: headers}),
               ),
             ),
           )
-          as _i5.Future<_i3.Response>);
+          as _i6.Future<_i4.Response>);
 
   @override
-  _i5.Future<_i3.Response> post(
+  _i6.Future<_i4.Response> post(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i9.Encoding? encoding,
+    _i12.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -199,8 +360,8 @@ class MockClient extends _i1.Mock implements _i3.Client {
               [url],
               {#headers: headers, #body: body, #encoding: encoding},
             ),
-            returnValue: _i5.Future<_i3.Response>.value(
-              _FakeResponse_1(
+            returnValue: _i6.Future<_i4.Response>.value(
+              _FakeResponse_2(
                 this,
                 Invocation.method(
                   #post,
@@ -210,14 +371,14 @@ class MockClient extends _i1.Mock implements _i3.Client {
               ),
             ),
           )
-          as _i5.Future<_i3.Response>);
+          as _i6.Future<_i4.Response>);
 
   @override
-  _i5.Future<_i3.Response> put(
+  _i6.Future<_i4.Response> put(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i9.Encoding? encoding,
+    _i12.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -225,8 +386,8 @@ class MockClient extends _i1.Mock implements _i3.Client {
               [url],
               {#headers: headers, #body: body, #encoding: encoding},
             ),
-            returnValue: _i5.Future<_i3.Response>.value(
-              _FakeResponse_1(
+            returnValue: _i6.Future<_i4.Response>.value(
+              _FakeResponse_2(
                 this,
                 Invocation.method(
                   #put,
@@ -236,14 +397,14 @@ class MockClient extends _i1.Mock implements _i3.Client {
               ),
             ),
           )
-          as _i5.Future<_i3.Response>);
+          as _i6.Future<_i4.Response>);
 
   @override
-  _i5.Future<_i3.Response> patch(
+  _i6.Future<_i4.Response> patch(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i9.Encoding? encoding,
+    _i12.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -251,8 +412,8 @@ class MockClient extends _i1.Mock implements _i3.Client {
               [url],
               {#headers: headers, #body: body, #encoding: encoding},
             ),
-            returnValue: _i5.Future<_i3.Response>.value(
-              _FakeResponse_1(
+            returnValue: _i6.Future<_i4.Response>.value(
+              _FakeResponse_2(
                 this,
                 Invocation.method(
                   #patch,
@@ -262,14 +423,14 @@ class MockClient extends _i1.Mock implements _i3.Client {
               ),
             ),
           )
-          as _i5.Future<_i3.Response>);
+          as _i6.Future<_i4.Response>);
 
   @override
-  _i5.Future<_i3.Response> delete(
+  _i6.Future<_i4.Response> delete(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i9.Encoding? encoding,
+    _i12.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -277,8 +438,8 @@ class MockClient extends _i1.Mock implements _i3.Client {
               [url],
               {#headers: headers, #body: body, #encoding: encoding},
             ),
-            returnValue: _i5.Future<_i3.Response>.value(
-              _FakeResponse_1(
+            returnValue: _i6.Future<_i4.Response>.value(
+              _FakeResponse_2(
                 this,
                 Invocation.method(
                   #delete,
@@ -288,44 +449,44 @@ class MockClient extends _i1.Mock implements _i3.Client {
               ),
             ),
           )
-          as _i5.Future<_i3.Response>);
+          as _i6.Future<_i4.Response>);
 
   @override
-  _i5.Future<String> read(Uri? url, {Map<String, String>? headers}) =>
+  _i6.Future<String> read(Uri? url, {Map<String, String>? headers}) =>
       (super.noSuchMethod(
             Invocation.method(#read, [url], {#headers: headers}),
-            returnValue: _i5.Future<String>.value(
-              _i10.dummyValue<String>(
+            returnValue: _i6.Future<String>.value(
+              _i13.dummyValue<String>(
                 this,
                 Invocation.method(#read, [url], {#headers: headers}),
               ),
             ),
           )
-          as _i5.Future<String>);
+          as _i6.Future<String>);
 
   @override
-  _i5.Future<_i11.Uint8List> readBytes(
+  _i6.Future<_i14.Uint8List> readBytes(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#readBytes, [url], {#headers: headers}),
-            returnValue: _i5.Future<_i11.Uint8List>.value(_i11.Uint8List(0)),
+            returnValue: _i6.Future<_i14.Uint8List>.value(_i14.Uint8List(0)),
           )
-          as _i5.Future<_i11.Uint8List>);
+          as _i6.Future<_i14.Uint8List>);
 
   @override
-  _i5.Future<_i3.StreamedResponse> send(_i3.BaseRequest? request) =>
+  _i6.Future<_i4.StreamedResponse> send(_i4.BaseRequest? request) =>
       (super.noSuchMethod(
             Invocation.method(#send, [request]),
-            returnValue: _i5.Future<_i3.StreamedResponse>.value(
-              _FakeStreamedResponse_2(
+            returnValue: _i6.Future<_i4.StreamedResponse>.value(
+              _FakeStreamedResponse_3(
                 this,
                 Invocation.method(#send, [request]),
               ),
             ),
           )
-          as _i5.Future<_i3.StreamedResponse>);
+          as _i6.Future<_i4.StreamedResponse>);
 
   @override
   void close() => super.noSuchMethod(

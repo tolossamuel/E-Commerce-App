@@ -27,3 +27,10 @@ class CacheFailure extends Failure{
   @override
   List<Object?> get props => [message];
 }
+
+class UserNotFound extends Failure{
+  final String message;
+  UserNotFound(this.message);
+  @override
+  List<Object?> get props => [message];
+}

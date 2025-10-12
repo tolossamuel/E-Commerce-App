@@ -22,8 +22,7 @@ void main(){
 
   AuthEntity authEntity = AuthEntity(
     token: "token",
-    email: "email",
-    userId: "userId"
+    userName: "userName"
   );
   // test login 
   test(
