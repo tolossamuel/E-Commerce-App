@@ -14,5 +14,5 @@ class ConstColor {
   static Color textDark = Color(0xff1E232C);
   static Color textWhite = Color(0xffF8F7FA);
   static Color smallTextColor = Color(0x80000000);
-  
+  static Color white = Color(0xffffffff);
 }

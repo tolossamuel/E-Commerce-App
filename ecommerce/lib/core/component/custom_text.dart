@@ -30,7 +30,8 @@ class CustomText extends StatelessWidget{
         fontSize: size,
         fontWeight: fontWeight,
         fontFamily: fontFamily,
-        color: color
+        color: color,
+        decoration: TextDecoration.none
       ),
     );
   }
