@@ -72,7 +72,7 @@ void main(){
           final result = await authDataSourceImpl.logIn("john@gmail.com", "m38rmF\$");
 
           // assert
-          expect(result, Left(UserNotFound("user not found")));
+          expect(result, Left(UserNotFound(message:"user not found")));
         }
       );
     }

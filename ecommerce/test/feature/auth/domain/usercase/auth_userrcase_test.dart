@@ -41,12 +41,12 @@ void main(){
     "should return Failure when call login from the repository",
     () async {
       // arrange
-      when(mockAuthRepo.login("email", "password")).thenAnswer((_) async => Left(NetworkFailure("Failure") as Failure));
+      when(mockAuthRepo.login("email", "password")).thenAnswer((_) async => Left(NetworkFailure(message:"Failure") as Failure));
       // act
       final result = await authUsercase.login("email", "password");
       // assert
    
-      expect(result, Left(NetworkFailure("Failure")));
+      expect(result, Left(NetworkFailure(message:"Failure")));
     }
   );
   //  test logout
@@ -66,12 +66,12 @@ void main(){
     "should return Failure when call logout from the repository",
     () async {
       // arrange
-      when(mockAuthRepo.logOut()).thenAnswer((_) async => Left(NetworkFailure("Failure") as Failure));
+      when(mockAuthRepo.logOut()).thenAnswer((_) async => Left(NetworkFailure(message:"Failure") as Failure));
       // act
       final result = await authUsercase.logOut();
       // assert
    
-      expect(result, Left(NetworkFailure("Failure")));
+      expect(result, Left(NetworkFailure(message:"Failure")));
     }
   );
   //  test isLoggin
@@ -91,12 +91,12 @@ void main(){
     "should return Failure when call isLoggin from the repository",
     () async {
       // arrange
-      when(mockAuthRepo.isLoggin()).thenAnswer((_) async => Left(NetworkFailure("Failure") as Failure));
+      when(mockAuthRepo.isLoggin()).thenAnswer((_) async => Left(NetworkFailure(message:"Failure") as Failure));
       // act
       final result = await authUsercase.isLoggin();
       // assert
    
-      expect(result, Left(NetworkFailure("Failure")));
+      expect(result, Left(NetworkFailure(message:"Failure")));
     }
   );
 }

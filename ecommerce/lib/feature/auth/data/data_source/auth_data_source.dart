@@ -33,7 +33,7 @@ class AuthDataSourceImpl extends AuthDataSource {
       }
       return Right(false);
     } on Exception catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure(message:e.toString()));
     }
   }
 
@@ -66,13 +66,13 @@ class AuthDataSourceImpl extends AuthDataSource {
           await sharedPreferences.setString("user", jsonEncode(userData));
           return Right(authEntity);
         } else {
-          return left(UserNotFound("user not found"));
+          return left(UserNotFound(message:"user not found"));
         }
       } else {
-        return left(NetworkFailure("no connection"));
+        return left(NetworkFailure(message:"no connection"));
       }
     } catch (e) {
-      return left(ServerFailure("please try again $e"));
+      return left(ServerFailure(message:"please try again $e"));
     }
   }
 
@@ -82,7 +82,7 @@ class AuthDataSourceImpl extends AuthDataSource {
       await sharedPreferences.remove("user");
       return Right(true);
     } catch (e) {
-      return left(ServerFailure("please try again"));
+      return left(ServerFailure(message: "please try again"));
     }
   }
 }
