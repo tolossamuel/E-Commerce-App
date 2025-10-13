@@ -12,6 +12,7 @@ abstract class AuthDataSource {
   Future<Either<Failure, bool>> isLoggin();
   Future<Either<Failure, bool>> logOut();
   Future<Either<Failure, AuthEntity>> logIn(String userName, String password);
+  Future<bool> getUserId(String userName);
 }
 
 class AuthDataSourceImpl extends AuthDataSource {
@@ -54,6 +55,9 @@ class AuthDataSourceImpl extends AuthDataSource {
         );
         
         if (response.statusCode == 200 || response.statusCode == 201) {
+          if (!await getUserId(userName)){
+            return left(UserNotFound(message: "user not found"));
+          }
           final result = response.body;
           final jsonData = jsonDecode(result);
         
@@ -83,6 +87,32 @@ class AuthDataSourceImpl extends AuthDataSource {
       return Right(true);
     } catch (e) {
       return left(ServerFailure(message: "please try again"));
+    }
+  }
+  
+  @override
+  Future<bool> getUserId(String userName) async {
+    try{
+      final String url = "https://fakestoreapi.com/users";
+      final headers = {'Content-Type': 'application/json'};
+      final response = await http.get(
+        Uri.parse(url),
+        headers: headers,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201){
+        final result = response.body;
+        final List<dynamic> jsonData = jsonDecode(result);
+        for (var user in jsonData){
+          if (user["username"] == userName){
+            await sharedPreferences.setInt("userId", user["id"]);
+            return true;
+          }
+        }
+        return false;
+      }
+      return false;
+    } catch (e){
+      return false;
     }
   }
 }
