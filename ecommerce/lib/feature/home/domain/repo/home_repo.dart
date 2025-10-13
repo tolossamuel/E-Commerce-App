@@ -10,6 +10,6 @@ abstract class HomeRepo{
   Future<Either<Failure, List<HomeEntity>>> getProductByCatagory();
   Future<Either<Failure, List<HomeEntity>>> getWishList();
   Future<Either<Failure, Set<int>>> getWishListId();
-  Future<Either<Failure, bool>> addToWishList(int productId);
+  Future<Either<Failure, bool>> addToWishList(HomeEntity product);
   Future<Either<Failure, bool>> removeFromWishList(int productId);
 }

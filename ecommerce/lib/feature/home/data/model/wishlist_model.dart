@@ -1,3 +1,4 @@
+import 'package:ecommerce/feature/home/domain/entity/home_entity.dart';
 import 'package:hive/hive.dart';
 
 part 'wishlist_model.g.dart';
@@ -36,22 +37,42 @@ class WishListModel extends HiveObject {
   });
 
   factory WishListModel.fromJson(Map<String, dynamic> json) => WishListModel(
-        id: json['id'],
-        title: json['title'],
-        image: json['image'],
-        price: (json['price'] as num).toDouble(),
-        descr: json['description'],
-        rating: Map<String, dynamic>.from(json['rating']),
-        category: json['category'],
-      );
+    id: json['id'],
+    title: json['title'],
+    image: json['image'],
+    price: (json['price'] as num).toDouble(),
+    descr: json['description'],
+    rating: Map<String, dynamic>.from(json['rating']),
+    category: json['category'],
+  );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'image': image,
-        'price': price,
-        'description': descr,
-        'rating': rating,
-        'category': category,
-      };
+    'id': id,
+    'title': title,
+    'image': image,
+    'price': price,
+    'description': descr,
+    'rating': rating,
+    'category': category,
+  };
+  // from entity
+  factory WishListModel.fromEntity(HomeEntity entity) => WishListModel(
+    id: entity.id,
+    title: entity.title,
+    image: entity.image,
+    price: entity.price,
+    descr: entity.descr,
+    rating: entity.rating,
+    category: entity.category,
+  );
+  // to entity
+  HomeEntity toEntity() => HomeEntity(
+    category: category,
+    descr: descr,
+    id: id,
+    image: image,
+    price: price,
+    rating: rating,
+    title: title,
+  );
 }

@@ -103,9 +103,9 @@ void main(){
         "test add wishList to repository",
         () async {
           // arrange
-          when(mockHomeRepo.addToWishList(1)).thenAnswer((_) async => Right(true));
+          when(mockHomeRepo.addToWishList(homeEntity)).thenAnswer((_) async => Right(true));
           // act
-          final result = await homeUsecase.addToWishList(1);
+          final result = await homeUsecase.addToWishList(homeEntity);
           // assert
           expect(result, Right(true));
         }

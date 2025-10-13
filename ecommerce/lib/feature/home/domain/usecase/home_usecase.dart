@@ -30,8 +30,8 @@ class HomeUsecase {
     return await homeRepo.getWishListId();
   }
 
-  Future<Either<Failure, bool>> addToWishList(int productId) async {
-    return await homeRepo.addToWishList(productId);
+  Future<Either<Failure, bool>> addToWishList(HomeEntity product) async {
+    return await homeRepo.addToWishList(product);
   }
 
   Future<Either<Failure, bool>> removeFromWishList(int productId) async {
