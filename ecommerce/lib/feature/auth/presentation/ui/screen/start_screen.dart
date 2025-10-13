@@ -4,7 +4,10 @@ import 'package:ecommerce/core/color/const_color.dart';
 import 'package:ecommerce/core/component/custom_button.dart';
 import 'package:ecommerce/core/component/custom_text.dart';
 import 'package:ecommerce/core/size/responsive_size.dart';
+import 'package:ecommerce/feature/auth/presentation/state/auth_bloc.dart';
+import 'package:ecommerce/feature/auth/presentation/state/auth_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class StartScreen extends StatelessWidget {
@@ -104,6 +107,7 @@ class StartScreen extends StatelessWidget {
                 child: Center(
                   child: CustomButton(
                     onTap: (){
+                      context.read<AuthBloc>().add(ClearInputEvent());
                       context.push('/login');
                     },
                     width: widthSize(width, 375, 342) , 

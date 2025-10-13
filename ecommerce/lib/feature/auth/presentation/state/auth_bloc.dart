@@ -27,15 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     on<IsLoginAuthEvent>(
       
       (event, emit) async {
-        emit(AuthIntialState());
-        if (userName.isEmpty){
-          emit(AuthInputError(message: "Username is required", type: "username"));
-          return;
-        }
-        if (password.isEmpty){
-          emit(AuthInputError(message: "Password is required", type: "password"));
-          return;
-        }
+        
         emit(AuthLoaddingState());
         final result = await authUsercase.isLoggin();
 
@@ -52,10 +44,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
 
     on<LoginAuthEvent>(
       (event, emit) async {
+        
+        
+        if (userName.isEmpty){
+          emit(AuthInputError(message: "Username is required", type: "username"));
+          return;
+        }
+        if (password.isEmpty){
+          emit(AuthInputError(message: "Password is required", type: "password"));
+          return;
+        }
         emit(AuthLoaddingState());
-        final result = await authUsercase.login(event.userName, event.password);
+       
+        final result = await authUsercase.login(userName, password);
+       
         result.fold(
           (isLeft){
+            
             emit(AuthErrorState(message: isLeft.message));
           }, (isRight){
             emit(AuthLogInState());
@@ -65,6 +70,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
 
     on<InputEvent>(
       (event, emit){
+     
         if (event.type == "username") {
           userName = event.input;
         } else if (event.type == "password"){

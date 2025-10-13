@@ -1,5 +1,6 @@
 
 import 'package:ecommerce/feature/auth/presentation/state/auth_bloc.dart';
+import 'package:ecommerce/feature/auth/presentation/state/show_password_cubit.dart';
 import 'package:ecommerce/injection.dart' as di;
 import 'package:ecommerce/rout.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
       providers : [
         BlocProvider<AuthBloc>(
           create: (context) => di.locator<AuthBloc>(),
+        ),
+        BlocProvider<ShowPasswordCubit>(
+          create: (context) => ShowPasswordCubit(),
         ),
       ],
       child: MaterialApp.router(
