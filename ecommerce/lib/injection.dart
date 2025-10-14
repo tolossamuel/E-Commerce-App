@@ -6,6 +6,13 @@ import 'package:ecommerce/feature/auth/data/repo/auth_repo_impl.dart';
 import 'package:ecommerce/feature/auth/domain/repo/auth_repo.dart';
 import 'package:ecommerce/feature/auth/domain/usercase/auth_usercase.dart';
 import 'package:ecommerce/feature/auth/presentation/state/auth_bloc.dart';
+import 'package:ecommerce/feature/cart/data/datasource/cart_local_data_source.dart';
+import 'package:ecommerce/feature/cart/data/datasource/cart_remote_data_source.dart';
+import 'package:ecommerce/feature/cart/data/repo/cart_repo_impl.dart';
+import 'package:ecommerce/feature/cart/domain/repo/cart_repo.dart';
+import 'package:ecommerce/feature/cart/domain/usecase/cart_usecase.dart';
+import 'package:ecommerce/feature/cart/presentation/state/cart/cart_bloc.dart';
+import 'package:ecommerce/feature/cart/presentation/state/cart/remote_cart_bloc.dart';
 import 'package:ecommerce/feature/home/data/datasource/home_data_source.dart';
 import 'package:ecommerce/feature/home/data/model/wishlist_model.dart';
 import 'package:ecommerce/feature/home/data/repo/home_repo_impl.dart';
@@ -54,5 +61,14 @@ locator.registerLazySingleton<Box<WishListModel>>(() => wishBox);
   locator.registerLazySingleton(() => ProductBloc(homeUsecase: locator()));
   locator.registerLazySingleton(() => WithListBloc(homeUsecase: locator()));
   locator.registerLazySingleton(() => WishlistIdCubit(homeUsecase: locator()));
+
+
+  // cart
+  locator.registerLazySingleton<CartLocalDataSource>(() => CartLocalDataSourceImpl(sharedPreferences: locator()));
+  locator.registerLazySingleton<CartRemoteDataSource>(() => CartRemoteDataSourceImpl(sharedPreferences: locator(), networkInfo: locator(), client: locator()));
+  locator.registerLazySingleton<CartRepo>(() => CartRepoImpl(networkInfo: locator(),cartLocalDataSource: locator(), cartRemoteDataSource: locator()));
+  locator.registerLazySingleton(() => CartUsecase(cartRepo: locator()));
+  locator.registerLazySingleton(() => CartBloc(cartUsecase: locator()));
+  locator.registerLazySingleton(() => RemoteCartBloc(cartUsecase: locator()));
 
 }

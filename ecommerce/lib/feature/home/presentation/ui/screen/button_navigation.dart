@@ -1,3 +1,4 @@
+import 'package:ecommerce/feature/cart/presentation/ui/screen/cart_screen.dart';
 import 'package:ecommerce/feature/home/presentation/ui/screen/home_page.dart';
 import 'package:ecommerce/feature/home/presentation/ui/screen/wishlist_page.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class BottomNavBar extends StatelessWidget {
       return [
         HomePage(),
         WishlistPage(),
+        CartScreen()
       ];
     }
 
@@ -29,6 +31,12 @@ class BottomNavBar extends StatelessWidget {
           icon: const Icon(Icons.favorite),
           title: "Wishlist",
           activeColorPrimary: Colors.red,
+          inactiveColorPrimary: Colors.grey,
+        ),
+        PersistentBottomNavBarItem(
+          icon: const Icon(Icons.shopping_cart_outlined),
+          title: "Cart",
+          activeColorPrimary: Colors.green,
           inactiveColorPrimary: Colors.grey,
         ),
       ];

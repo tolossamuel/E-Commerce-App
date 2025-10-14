@@ -37,6 +37,7 @@ class _WishlistPageState extends State<WishlistPage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    
 
     return SafeArea(
       child: Scaffold(

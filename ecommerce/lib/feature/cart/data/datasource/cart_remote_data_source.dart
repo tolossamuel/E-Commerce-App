@@ -60,11 +60,10 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource{
   Future<Either<Failure, List<CartEntity>>> getCartItems() async{
     try{
       
-      final userId =  sharedPreferences.getString("userId")?? "-1";
+      final userId =  sharedPreferences.getString("userId")?? "1";
       if (userId == "-1"){
         return Left(UserNotFound(message: "User not found"));
       }
-   
       final String url = "https://fakestoreapi.com/carts/user/$userId";
       final header = {"content-type": "application/json"};
       final response = await client.get(
@@ -75,18 +74,20 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource{
       if(response.statusCode == 200 || response.statusCode == 201){
         final result = response.body;
         final List<dynamic> jsonData = jsonDecode(result);
-        final Map<int, int> cartCount = {};
+        final Map<String, int> cartCount = {};
         for (var cart in jsonData){
           final List<dynamic> products = cart["products"]??[];
           for (var product in products){
             final productId = product["productId"];
             final quantity = product["quantity"];
-            cartCount[productId] = cartCount.containsKey(productId) ? cartCount[productId]! + quantity : quantity;
+            cartCount[productId.toString()] = cartCount.containsKey(productId.toString()) ? cartCount[productId.toString()]! + quantity : quantity;
           }
         }
         
         final List<CartEntity> carItems = [];
         // check if product in local storage
+        // save cartcount to local storage
+        sharedPreferences.setString("cart_items", jsonEncode(cartCount));
         final jsonProduct =  sharedPreferences.getString("product");
         List<dynamic> products = [];
         if (jsonProduct == null){
@@ -109,7 +110,7 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource{
         }
         for (var product in products){
           final productId = product["id"];
-          if (cartCount.containsKey(productId)){
+          if (cartCount.containsKey(product["id"].toString())){
             carItems.add(
               CartEntity(
                 id: productId,
