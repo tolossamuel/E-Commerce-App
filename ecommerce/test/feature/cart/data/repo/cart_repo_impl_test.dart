@@ -1,10 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:ecommerce/core/failure/failure.dart';
 import 'package:ecommerce/core/network_checker/network_checker.dart';
 import 'package:ecommerce/feature/cart/data/datasource/cart_local_data_source.dart';
 import 'package:ecommerce/feature/cart/data/datasource/cart_remote_data_source.dart';
 import 'package:ecommerce/feature/cart/domain/entity/cart_entity.dart';
-import 'package:ecommerce/feature/cart/domain/repo/cart_repo.dart';
+
 import 'package:ecommerce/feature/cart/data/repo/cart_repo_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
