@@ -22,8 +22,15 @@ void main(){
     cartUsecase = CartUsecase(cartRepo: mockCartRepo);
   });
 
-  CartEntity cartEntity = const CartEntity(catagory: 'Electronics', descr: 'Smartphone', id: 1, title: 'iPhone 13', image: 'image_url', price: 999.99, quantity: 1, rating: 4.5);
+  CartEntity cartEntity = const CartEntity(catagory: 'Electronics', descr: 'Smartphone', id: 1, title: 'iPhone 13', image: 'image_url', price: 999.99, quantity: 1, rating: {"rate" : 4.5, "count": 100});
   List<CartEntity> cartEntityList = [cartEntity];
+  List<Map<String, int>> cartProduct = [
+    {
+      "productId": cartEntity.id,
+      "quantity": cartEntity.quantity
+    }
+  ];
+
   group(
     "test cart functionality",
     () {
@@ -45,9 +52,9 @@ void main(){
       test(
         "test add to cart",
         () async {
-          when(mockCartRepo.addToCart(cartEntity)).thenAnswer((_) async => Right(true) );
+          when(mockCartRepo.addToCart(cartProduct)).thenAnswer((_) async => Right(true) );
           // act
-          final result = await cartUsecase.addToCart(cartEntity);
+          final result = await cartUsecase.addToCart(cartProduct);
           // assert
           expect(result, Right(true));
         }

@@ -11,7 +11,7 @@ class CartEntity extends Equatable{
   final double price;
   final int quantity;
   final String catagory;
-  final double rating;
+  final Map<String, dynamic> rating;
 
   const CartEntity({
     required this.catagory,
