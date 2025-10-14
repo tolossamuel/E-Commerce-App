@@ -4,8 +4,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i6;
-import 'dart:convert' as _i17;
-import 'dart:typed_data' as _i18;
+import 'dart:convert' as _i19;
+import 'dart:typed_data' as _i20;
 
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:ecommerce/core/failure/failure.dart' as _i7;
@@ -14,6 +14,8 @@ import 'package:ecommerce/feature/auth/data/data_source/auth_data_source.dart'
     as _i9;
 import 'package:ecommerce/feature/auth/domain/entity/auth_entity.dart' as _i8;
 import 'package:ecommerce/feature/auth/domain/repo/auth_repo.dart' as _i5;
+import 'package:ecommerce/feature/cart/domain/entity/cart_entity.dart' as _i18;
+import 'package:ecommerce/feature/cart/domain/repo/cart_repo.dart' as _i17;
 import 'package:ecommerce/feature/home/data/datasource/home_data_source.dart'
     as _i16;
 import 'package:ecommerce/feature/home/domain/entity/home_entity.dart' as _i13;
@@ -957,6 +959,68 @@ class MockHomeDataSource extends _i1.Mock implements _i16.HomeDataSource {
       ) as _i6.Future<_i2.Either<_i7.Failure, bool>>);
 }
 
+/// A class which mocks [CartRepo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCartRepo extends _i1.Mock implements _i17.CartRepo {
+  MockCartRepo() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<_i2.Either<_i7.Failure, bool>> addToCart(
+          _i18.CartEntity? cartItem) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addToCart,
+          [cartItem],
+        ),
+        returnValue: _i6.Future<_i2.Either<_i7.Failure, bool>>.value(
+            _FakeEither_0<_i7.Failure, bool>(
+          this,
+          Invocation.method(
+            #addToCart,
+            [cartItem],
+          ),
+        )),
+      ) as _i6.Future<_i2.Either<_i7.Failure, bool>>);
+
+  @override
+  _i6.Future<_i2.Either<_i7.Failure, bool>> removeFromCart(int? itemId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #removeFromCart,
+          [itemId],
+        ),
+        returnValue: _i6.Future<_i2.Either<_i7.Failure, bool>>.value(
+            _FakeEither_0<_i7.Failure, bool>(
+          this,
+          Invocation.method(
+            #removeFromCart,
+            [itemId],
+          ),
+        )),
+      ) as _i6.Future<_i2.Either<_i7.Failure, bool>>);
+
+  @override
+  _i6.Future<_i2.Either<_i7.Failure, List<_i18.CartEntity>>> getCartItems() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getCartItems,
+          [],
+        ),
+        returnValue:
+            _i6.Future<_i2.Either<_i7.Failure, List<_i18.CartEntity>>>.value(
+                _FakeEither_0<_i7.Failure, List<_i18.CartEntity>>(
+          this,
+          Invocation.method(
+            #getCartItems,
+            [],
+          ),
+        )),
+      ) as _i6.Future<_i2.Either<_i7.Failure, List<_i18.CartEntity>>>);
+}
+
 /// A class which mocks [Client].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -1012,7 +1076,7 @@ class MockClient extends _i1.Mock implements _i4.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i17.Encoding? encoding,
+    _i19.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1043,7 +1107,7 @@ class MockClient extends _i1.Mock implements _i4.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i17.Encoding? encoding,
+    _i19.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1074,7 +1138,7 @@ class MockClient extends _i1.Mock implements _i4.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i17.Encoding? encoding,
+    _i19.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1105,7 +1169,7 @@ class MockClient extends _i1.Mock implements _i4.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i17.Encoding? encoding,
+    _i19.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1153,7 +1217,7 @@ class MockClient extends _i1.Mock implements _i4.Client {
       ) as _i6.Future<String>);
 
   @override
-  _i6.Future<_i18.Uint8List> readBytes(
+  _i6.Future<_i20.Uint8List> readBytes(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -1163,8 +1227,8 @@ class MockClient extends _i1.Mock implements _i4.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i6.Future<_i18.Uint8List>.value(_i18.Uint8List(0)),
-      ) as _i6.Future<_i18.Uint8List>);
+        returnValue: _i6.Future<_i20.Uint8List>.value(_i20.Uint8List(0)),
+      ) as _i6.Future<_i20.Uint8List>);
 
   @override
   _i6.Future<_i4.StreamedResponse> send(_i4.BaseRequest? request) =>

@@ -1,6 +1,7 @@
 import 'package:ecommerce/core/network_checker/network_checker.dart';
 import 'package:ecommerce/feature/auth/data/data_source/auth_data_source.dart';
 import 'package:ecommerce/feature/auth/domain/repo/auth_repo.dart';
+import 'package:ecommerce/feature/cart/domain/repo/cart_repo.dart';
 import 'package:ecommerce/feature/home/data/datasource/home_data_source.dart';
 import 'package:ecommerce/feature/home/data/model/wishlist_model.dart';
 import 'package:ecommerce/feature/home/domain/repo/home_repo.dart';
@@ -18,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
     HomeRepo,
     Box<WishListModel>,
     HomeDataSource,
+    CartRepo,
   ]
 )
 @GenerateMocks([
