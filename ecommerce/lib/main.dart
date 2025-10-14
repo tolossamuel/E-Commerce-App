@@ -7,11 +7,19 @@ import 'package:ecommerce/feature/home/presentation/state/wishlist_id_cubit.dart
 import 'package:ecommerce/injection.dart' as di;
 import 'package:ecommerce/rout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await di.setUpLocator();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // background color of status bar
+      statusBarIconBrightness: Brightness.dark, // icons: dark on light
+      statusBarBrightness: Brightness.light, // for iOS
+    ),
+  );
   runApp(const MyApp());
 }
 
