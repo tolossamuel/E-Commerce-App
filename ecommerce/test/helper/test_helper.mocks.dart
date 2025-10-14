@@ -132,20 +132,21 @@ class MockAuthRepo extends _i1.Mock implements _i5.AuthRepo {
       ) as _i6.Future<_i2.Either<_i7.Failure, bool>>);
 
   @override
-  _i6.Future<_i2.Either<_i7.Failure, bool>> isLoggin() => (super.noSuchMethod(
+  _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>> isLoggin() =>
+      (super.noSuchMethod(
         Invocation.method(
           #isLoggin,
           [],
         ),
-        returnValue: _i6.Future<_i2.Either<_i7.Failure, bool>>.value(
-            _FakeEither_0<_i7.Failure, bool>(
+        returnValue: _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>>.value(
+            _FakeEither_0<_i7.Failure, _i8.AuthEntity>(
           this,
           Invocation.method(
             #isLoggin,
             [],
           ),
         )),
-      ) as _i6.Future<_i2.Either<_i7.Failure, bool>>);
+      ) as _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>>);
 }
 
 /// A class which mocks [AuthDataSource].
@@ -157,20 +158,21 @@ class MockAuthDataSource extends _i1.Mock implements _i9.AuthDataSource {
   }
 
   @override
-  _i6.Future<_i2.Either<_i7.Failure, bool>> isLoggin() => (super.noSuchMethod(
+  _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>> isLoggin() =>
+      (super.noSuchMethod(
         Invocation.method(
           #isLoggin,
           [],
         ),
-        returnValue: _i6.Future<_i2.Either<_i7.Failure, bool>>.value(
-            _FakeEither_0<_i7.Failure, bool>(
+        returnValue: _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>>.value(
+            _FakeEither_0<_i7.Failure, _i8.AuthEntity>(
           this,
           Invocation.method(
             #isLoggin,
             [],
           ),
         )),
-      ) as _i6.Future<_i2.Either<_i7.Failure, bool>>);
+      ) as _i6.Future<_i2.Either<_i7.Failure, _i8.AuthEntity>>);
 
   @override
   _i6.Future<_i2.Either<_i7.Failure, bool>> logOut() => (super.noSuchMethod(

@@ -6,7 +6,17 @@ import 'package:ecommerce/feature/auth/data/repo/auth_repo_impl.dart';
 import 'package:ecommerce/feature/auth/domain/repo/auth_repo.dart';
 import 'package:ecommerce/feature/auth/domain/usercase/auth_usercase.dart';
 import 'package:ecommerce/feature/auth/presentation/state/auth_bloc.dart';
+import 'package:ecommerce/feature/home/data/datasource/home_data_source.dart';
+import 'package:ecommerce/feature/home/data/model/wishlist_model.dart';
+import 'package:ecommerce/feature/home/data/repo/home_repo_impl.dart';
+import 'package:ecommerce/feature/home/domain/repo/home_repo.dart';
+import 'package:ecommerce/feature/home/domain/usecase/home_usecase.dart';
+import 'package:ecommerce/feature/home/presentation/state/product/product_bloc.dart';
+import 'package:ecommerce/feature/home/presentation/state/wishList/with_list_bloc.dart';
+import 'package:ecommerce/feature/home/presentation/state/wishlist_id_cubit.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,5 +38,21 @@ Future<void> setUpLocator() async {
   locator.registerLazySingleton<AuthRepo>(() => AuthRepoImpl(authDataSource: locator()));
   locator.registerLazySingleton(()=> AuthUsercase(authRepo: locator()));
   locator.registerLazySingleton( () => AuthBloc(authUsercase: locator()));
+
+  // product and wishlist
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(WishListModelAdapter());
+  final wishBox = await Hive.openBox<WishListModel>('wishlist');
+
+
+locator.registerLazySingleton<Box<WishListModel>>(() => wishBox);
+
+  locator.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(sharedPreferences: locator(), networkInfo: locator(), client: locator(), wishBox: locator()));
+  locator.registerLazySingleton<HomeRepo>(()=> HomeRepoImpl(homeDataSource: locator()));
+  locator.registerLazySingleton(() => HomeUsecase(homeRepo: locator()));
+  locator.registerLazySingleton(() => ProductBloc(homeUsecase: locator()));
+  locator.registerLazySingleton(() => WithListBloc(homeUsecase: locator()));
+  locator.registerLazySingleton(() => WishlistIdCubit(homeUsecase: locator()));
 
 }

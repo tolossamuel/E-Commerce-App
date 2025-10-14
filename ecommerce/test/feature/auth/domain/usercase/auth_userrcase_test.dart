@@ -79,11 +79,11 @@ void main(){
     "should return True when call isLoggin from the repository",
     () async {
       // arrange
-      when(mockAuthRepo.isLoggin()).thenAnswer((_) async => Right(true));
+      when(mockAuthRepo.isLoggin()).thenAnswer((_) async => Right(authEntity));
       // act 
       final result = await authUsercase.isLoggin();
       // assert
-      expect(result, Right(true));
+      expect(result, Right(authEntity));
     }
   );
 

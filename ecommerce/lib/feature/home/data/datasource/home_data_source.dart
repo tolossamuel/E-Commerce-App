@@ -40,7 +40,11 @@ class HomeDataSourceImpl extends HomeDataSource {
   @override
   Future<Either<Failure, bool>> addToWishList(HomeEntity product) async{
     try{
+      final existingList = sharedPreferences.getStringList("wishListId") ?? [];
+      final existingSet = existingList.toSet();
+      existingSet.add(product.id.toString());
       await wishBox.put(product.id, WishListModel.fromEntity(product));
+      await sharedPreferences.setStringList("wishListId", existingSet.toList());
       return Right(true);
     } catch(e) {
       return Left(ServerFailure(message: "product not added to wishlist"));
@@ -117,10 +121,10 @@ class HomeDataSourceImpl extends HomeDataSource {
   @override
   Future<Either<Failure, Set<int>>> getWishListId() async{
     try{
-      final Set<int> wishListSets = {};
-      for (var element in wishBox.values){
-        wishListSets.add(element.id);
-      }
+      final List<String> storedList = sharedPreferences.getStringList("wishListId") ?? [];
+
+      final Set<int> wishListSets = storedList.map((e) => int.parse(e)).toSet();
+
       return Right(wishListSets);
     } catch (e) {
       return Left(ServerFailure(message: "Please try again"));
@@ -130,7 +134,11 @@ class HomeDataSourceImpl extends HomeDataSource {
   @override
   Future<Either<Failure, bool>> removeFromWishList(int productId) async{
     try{
+      final List<String> storedList = sharedPreferences.getStringList("wishListId") ?? [];
+
       wishBox.delete(productId);
+      storedList.remove(productId.toString());
+      await sharedPreferences.setStringList("wishListId", storedList);
       return Future.value(Right(true));
     } catch (e) {
       return Future.value(Left(ServerFailure(message: "Please try again")));

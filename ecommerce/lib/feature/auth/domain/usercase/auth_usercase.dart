@@ -20,7 +20,7 @@ class AuthUsercase {
     return await authRepo.logOut();
   }
 
-  Future<Either<Failure, bool>> isLoggin() async {
+  Future<Either<Failure, AuthEntity>> isLoggin() async {
     return await authRepo.isLoggin();
   }
 }

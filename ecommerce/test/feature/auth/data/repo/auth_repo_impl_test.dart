@@ -78,11 +78,11 @@ void main(){
     "should return True when call isLoggin from the datasource",
     () async {
       // arrange
-      when(mockAuthDataSSource.isLoggin()).thenAnswer((_) async => Right(true));
+      when(mockAuthDataSSource.isLoggin()).thenAnswer((_) async => Right(authEntity));
       // act 
       final result = await authRepoImpl.isLoggin();
       // assert
-      expect(result, Right(true));
+      expect(result, Right(authEntity));
     }
   );
 

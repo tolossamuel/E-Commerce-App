@@ -8,7 +8,6 @@ class AuthModel extends AuthEntity{
   
 
   factory AuthModel.fromJson(dynamic json) {
-    print(123);
     return AuthModel(
       token: json['token'] as String,
       userName: json['userName'] as String,

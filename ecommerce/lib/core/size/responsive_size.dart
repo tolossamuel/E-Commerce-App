@@ -12,6 +12,7 @@ double heightSize(double currentScreenHeight, double figmaScreenHeight, double c
 }
 
 double textSize(double currentScreenTextSize, double figmaTextSize, double componentTextSize){
+  
   final double ratioTextSize = (currentScreenTextSize * componentTextSize)/figmaTextSize;
   return ratioTextSize;
 }

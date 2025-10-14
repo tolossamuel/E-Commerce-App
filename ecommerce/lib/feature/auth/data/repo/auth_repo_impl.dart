@@ -14,7 +14,7 @@ class AuthRepoImpl extends AuthRepo {
   });
 
   @override
-  Future<Either<Failure, bool>> isLoggin() async {
+  Future<Either<Failure, AuthEntity>> isLoggin() async {
     return await authDataSource.isLoggin();
   }
 

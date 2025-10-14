@@ -12,7 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     String password = "";
     on<LogOutAuthEvent>(
       (event,emit) async {
-        emit(AuthLoaddingState());
+        emit(AuthLogOutState());
         final result = await authUsercase.logOut();
         result.fold(
           (failure){
@@ -37,7 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
           }, (ifRight) {
             userName = "";
             password = "";
-            emit(AuthLogInState());
+            emit(AuthLogInState(userName: ifRight.userName));
           });
       }
     );
@@ -63,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
             
             emit(AuthErrorState(message: isLeft.message));
           }, (isRight){
-            emit(AuthLogInState());
+            emit(AuthLogInState(userName: isRight.userName));
           });
       }
     );

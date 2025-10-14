@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthDataSource {
-  Future<Either<Failure, bool>> isLoggin();
+  Future<Either<Failure, AuthEntity>> isLoggin();
   Future<Either<Failure, bool>> logOut();
   Future<Either<Failure, AuthEntity>> logIn(String userName, String password);
   Future<bool> getUserId(String userName);
@@ -25,14 +25,14 @@ class AuthDataSourceImpl extends AuthDataSource {
     required this.client,
   });
   @override
-  Future<Either<Failure, bool>> isLoggin() async {
+  Future<Either<Failure, AuthEntity>> isLoggin() async {
     // check if sharedPreferance save user info in string key of user
     try {
       final userData = sharedPreferences.getString("user");
       if (userData != null && userData.isNotEmpty) {
-        return Right(true);
+        return Right(AuthModel.fromJson(jsonDecode(userData)).toEntity());
       }
-      return Right(false);
+      return Left(UserNotFound(message: "user not found"));
     } on Exception catch (e) {
       return Left(ServerFailure(message:e.toString()));
     }

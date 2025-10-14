@@ -4,7 +4,10 @@ abstract class AuthState{}
 
 class AuthLoaddingState extends AuthState{}
 
-class AuthLogInState extends AuthState{}
+class AuthLogInState extends AuthState{
+  final String userName;
+  AuthLogInState({required this.userName});
+}
 
 class AuthLogOutState extends AuthState{}
 

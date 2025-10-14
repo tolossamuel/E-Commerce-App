@@ -34,14 +34,18 @@ class LoginPage extends StatelessWidget {
           errorMessage = authState.message;
           errorType = authState.type;
         }
+        if (authState is AuthLogInState){
+          context.go("/main");
+        }
       },
       child: Scaffold(
         body: Container(
           width: width,
           height: height,
-          padding: EdgeInsets.symmetric(
-            horizontal: widthSize(width, 375, 22),
-            vertical: heightSize(height, 812, 16),
+          padding: EdgeInsets.only(
+            left: widthSize(width, 375, 22),
+            right:  widthSize(width, 375, 22),
+            top: heightSize(height, 812, 40),
           ),
           color: ConstColor.white,
           child: BlocBuilder<AuthBloc, AuthState>(
