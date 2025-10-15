@@ -3,8 +3,11 @@ import 'package:ecommerce/core/color/const_color.dart';
 import 'package:ecommerce/core/component/custom_text.dart';
 import 'package:ecommerce/core/size/responsive_size.dart';
 import 'package:ecommerce/feature/cart/domain/entity/cart_entity.dart';
+import 'package:ecommerce/feature/cart/presentation/state/cart/cart_bloc.dart';
+import 'package:ecommerce/feature/cart/presentation/state/cart/cart_event.dart';
+import 'package:ecommerce/feature/cart/presentation/state/cart/remote_cart_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CartDisplayWidget extends StatelessWidget {
@@ -74,30 +77,44 @@ class CartDisplayWidget extends StatelessWidget {
                     width: widthSize(width, 375, 125),
                     child: Row(
                       children: [
-                        Container(
-                          width: widthSize(width, 375, 40),
-                          height: widthSize(width, 375, 30),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: ConstColor.textGrey..withOpacity(0.5),
-                              width: 1,
-                            ),
-                          ),
-                          child: Center(
-                            child: Container(
-                              width: widthSize(width, 375, 20),
-                              height: widthSize(width, 375, 20),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: ConstColor.textDark,
-                                  width: 1,
-                                ),
-                                shape: BoxShape.circle,
+                        GestureDetector(
+                          onTap: (){
+                                context.read<CartBloc>().add(AddToCartEvent(product: [{
+                                  "productId": cartEntity.id,
+                                  "quantity": -1
+                                }],
+                                remove: true
+                                
+                                )
+                                
+                                );
+                                
+                              },
+                          child: Container(
+                            width: widthSize(width, 375, 40),
+                            height: widthSize(width, 375, 30),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: ConstColor.textGrey..withOpacity(0.5),
+                                width: 1,
                               ),
-                              child: Icon(
-                                Icons.remove,
-                                size: widthSize(width, 375, 18),
-                                color: ConstColor.textDark,
+                            ),
+                            child: Center(
+                              child: Container(
+                                width: widthSize(width, 375, 20),
+                                height: widthSize(width, 375, 20),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: ConstColor.textDark,
+                                    width: 1,
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.remove,
+                                  size: widthSize(width, 375, 18),
+                                  color: ConstColor.textDark,
+                                ),
                               ),
                             ),
                           ),
@@ -121,30 +138,42 @@ class CartDisplayWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          width: widthSize(width, 375, 40),
-                          height: widthSize(width, 375, 30),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: ConstColor.textGrey.withOpacity(0.5),
-                              width: 1,
-                            ),
-                          ),
-                          child: Center(
-                            child: Container(
-                              width: widthSize(width, 375, 20),
-                              height: widthSize(width, 375, 20),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: ConstColor.textDark,
-                                  width: 1,
-                                ),
-                                shape: BoxShape.circle,
+                        GestureDetector(
+                          onTap: (){
+                                context.read<CartBloc>().add(AddToCartEvent(product: [{
+                                  "productId": cartEntity.id,
+                                  "quantity": 1
+                                }]));
+                                context.read<RemoteCartBloc>().add(AddToCartEvent(product: [{
+                                  "productId": cartEntity.id,
+                                  "quantity": 1
+                                }]));
+                              },
+                          child: Container(
+                            width: widthSize(width, 375, 40),
+                            height: widthSize(width, 375, 30),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: ConstColor.textGrey.withOpacity(0.5),
+                                width: 1,
                               ),
-                              child: Icon(
-                                Icons.add,
-                                size: widthSize(width, 375, 18),
-                                color: ConstColor.textDark,
+                            ),
+                            child: Center(
+                              child: Container(
+                                width: widthSize(width, 375, 20),
+                                height: widthSize(width, 375, 20),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: ConstColor.textDark,
+                                    width: 1,
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.add,
+                                  size: widthSize(width, 375, 18),
+                                  color: ConstColor.textDark,
+                                ),
                               ),
                             ),
                           ),

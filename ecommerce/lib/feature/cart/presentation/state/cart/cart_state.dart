@@ -18,3 +18,8 @@ class CartErrorState extends CartState{
   final String errorMesage;
   CartErrorState({required this.errorMesage});
 }
+
+class CartOperationMessage extends CartState{
+  final String message;
+  CartOperationMessage({required this.message});
+}

@@ -3,6 +3,8 @@ import 'package:ecommerce/core/color/const_color.dart';
 import 'package:ecommerce/core/component/custom_button.dart';
 import 'package:ecommerce/core/component/custom_text.dart';
 import 'package:ecommerce/core/size/responsive_size.dart';
+import 'package:ecommerce/feature/cart/presentation/state/cart/cart_bloc.dart';
+import 'package:ecommerce/feature/cart/presentation/state/cart/cart_event.dart';
 import 'package:ecommerce/feature/home/domain/entity/home_entity.dart';
 import 'package:ecommerce/feature/home/presentation/state/wishList/wish_list_event.dart';
 import 'package:ecommerce/feature/home/presentation/state/wishList/wish_list_state.dart';
@@ -169,6 +171,16 @@ class WishListDisplay extends StatelessWidget {
                     ),
                     SizedBox(height: heightSize(height, 812, 10)),
                     CustomButton(
+                      onTap: (){
+                        context.read<CartBloc>().add(AddToCartEvent(product: [{
+                                  "productId": product.id,
+                                  "quantity": 1
+                                }],
+                                
+                                
+                                )
+                        );
+                      },
                       width: widthSize(width, 375, 214),
                       color: ConstColor.white,
                       radies: widthSize(width, 375, 6),

@@ -9,6 +9,7 @@ import 'package:ecommerce/feature/cart/presentation/state/cart/cart_bloc.dart';
 import 'package:ecommerce/feature/cart/presentation/state/cart/cart_event.dart';
 import 'package:ecommerce/feature/cart/presentation/state/cart/cart_state.dart';
 import 'package:ecommerce/feature/cart/presentation/state/cart/remote_cart_bloc.dart';
+import 'package:ecommerce/feature/cart/presentation/state/get_total_cubit.dart';
 import 'package:ecommerce/feature/cart/presentation/ui/wedget/cart_display_widget.dart';
 import 'package:ecommerce/feature/cart/presentation/ui/wedget/cart_loading.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,7 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     super.initState();
     cartItems = [];
-    // final wishListBloc = context.read<WithListBloc>();
     final cartLocalBloc = context.read<CartBloc>();
-
     if (cartLocalBloc.state is CartIntialState) {
       context.read<CartBloc>().add(LoadCartEvent());
     }
@@ -49,13 +48,25 @@ class _CartScreenState extends State<CartScreen> {
       listener: (context, locarCartBloc) {
         if (locarCartBloc is CartLoadedState) {
           cartItems = locarCartBloc.cartItems;
+          context.read<GetTotalCubit>().fetchTotalPrice();
+        }
+        if (locarCartBloc is CartOperationMessage){
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(locarCartBloc.message))
+          );
+          context.read<CartBloc>().add(LoadCartEvent());
         }
       },
       child: BlocListener<RemoteCartBloc, CartState>(
         listener: (context, remoteCart) {
           if (remoteCart is CartLoadedState) {
             cartItems = remoteCart.cartItems;
+            context.read<GetTotalCubit>().fetchTotalPrice();
           }
+          if (remoteCart is CartOperationMessage){
+          
+          context.read<RemoteCartBloc>().add(LoadCartEvent());
+        }
         },
         child: SafeArea(
           child: Scaffold(
@@ -93,10 +104,8 @@ class _CartScreenState extends State<CartScreen> {
                             children: [
                               CustomButton(
                                 onTap: () {
-                                  context.read<AuthBloc>().add(
-                                    LogOutAuthEvent(),
-                                  );
-                                  context.go("/");
+                                  context.read<AuthBloc>().add(LogOutAuthEvent());
+                              context.go("/");
                                 },
                                 width: widthSize(width, 375, 32),
                                 color: ConstColor.lightYellow.withOpacity(0.6),
@@ -125,8 +134,6 @@ class _CartScreenState extends State<CartScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
-
                     BlocBuilder<CartBloc, CartState>(
                       builder: (context, localCartState) {
                         return BlocBuilder<RemoteCartBloc, CartState>(
@@ -134,7 +141,8 @@ class _CartScreenState extends State<CartScreen> {
                             return (localCartState is CartLoadedState &&
                                     remoteCartState is CartLoadedState &&
                                     localCartState.cartItems.isEmpty &&
-                                    remoteCartState.cartItems.isEmpty)
+                                    remoteCartState.cartItems.isEmpty &&
+                                    cartItems.isEmpty)
                                 ? Center(
                                     child: CustomText(
                                       color: ConstColor.textDark,
@@ -143,7 +151,8 @@ class _CartScreenState extends State<CartScreen> {
                                     ),
                                   )
                                 : (localCartState is CartErrorState &&
-                                      remoteCartState is CartErrorState)
+                                      remoteCartState is CartErrorState &&
+                                      cartItems.isEmpty)
                                 ? CustomButton(
                                     width: widthSize(width, 375, 150),
                                     color: ConstColor.lightYellow,
@@ -196,10 +205,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     decoration: BoxDecoration(
                                                       color: Colors.red
                                                           .withOpacity(0.85),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
+                                                      
                                                     ),
                                                     child: const Icon(
                                                       Icons.delete,
@@ -216,28 +222,9 @@ class _CartScreenState extends State<CartScreen> {
                                                                 .id,
                                                       ),
                                                     );
-                                                    context
-                                                        .read<RemoteCartBloc>()
-                                                        .add(
-                                                          RemoveCartEvent(
-                                                            productId:
-                                                                cartItems[index %
-                                                                        cartItems
-                                                                            .length]
-                                                                    .id,
-                                                          ),
-                                                        );
-                                                    ScaffoldMessenger.of(
-                                                      context,
-                                                    ).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          '${cartItems[index % cartItems.length].title} removed from cart',
-                                                        ),
-                                                        backgroundColor:
-                                                            Colors.redAccent,
-                                                      ),
-                                                    );
+                                                    
+                               
+                                                    
                                                   },
                                                   child: CartDisplayWidget(
                                                     cartEntity:
@@ -256,6 +243,93 @@ class _CartScreenState extends State<CartScreen> {
                   ],
                 ),
               ),
+            ),
+            bottomNavigationBar: BlocBuilder<GetTotalCubit, double>(
+              builder: (context, totalPrice) {
+                return Container(
+                  width: width,
+                  height: heightSize(height, 812, 110),
+                  decoration: BoxDecoration(
+                    color: ConstColor.white,
+                    border: Border.all(
+                      color: ConstColor.textGrey.withOpacity(0.2),
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: widthSize(width, 375, 110),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: widthSize(width, 375, 110),
+                              child: CustomText(
+                                color: Color(0xff616161),
+                                text: "Cart Total",
+                                size: widthSize(width, 375, 12),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(
+                              width: widthSize(width, 375, 110),
+                              child: CustomText(
+                                color: ConstColor.textDark,
+                                text: "\$$totalPrice",
+                                size: () {
+                                  final len = "\$$totalPrice".length;
+                                  if (len <= 4) {
+                                    return widthSize(width, 375, 24);
+                                  }
+                                  if (len == 5) {
+                                    return widthSize(width, 375, 22);
+                                  }
+                                  if (len == 6) {
+                                    return widthSize(width, 375, 20);
+                                  }
+                                  if (len == 7) {
+                                    return widthSize(width, 375, 18);
+                                  }
+                                  if (len == 8) {
+                                    return widthSize(width, 375, 16);
+                                  }
+                                  return widthSize(width, 375, 15);
+                                }(),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: heightSize(height, 812, 50),
+                        child: CustomButton(
+                          width: widthSize(width, 375, 214),
+
+                          color: ConstColor.textDark,
+                          radies: widthSize(width, 375, 6),
+                          topPadding: heightSize(height, 812, 14),
+                          bottomPadding: heightSize(height, 812, 14),
+                          child: Center(
+                            child: SizedBox(
+                              width: widthSize(width, 375, 80),
+                              child: CustomText(
+                                color: ConstColor.white,
+                                text: "Checkout",
+                                size: widthSize(width, 375, 14),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         ),

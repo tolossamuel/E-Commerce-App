@@ -33,4 +33,7 @@ class CartUsecase {
   Future<Either<Failure, List<CartEntity>>> getCartItemsLocal() async {
     return await cartRepo.getCartItemsLocal();
   }
+  Future<double> getTotalPrice() async {
+    return await cartRepo.getTotalPrice();
+  }
 }

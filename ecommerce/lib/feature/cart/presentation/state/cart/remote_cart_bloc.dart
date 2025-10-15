@@ -23,49 +23,46 @@ on<LoadCartEvent>(
     );
   }
 );
+on<AddToCartEvent>((event, emit) async {
+   
+      emit(CartLoadingState());
+      final result = await cartUsecase.addToCart(event.product);
+      result.fold(
+        // The failure case
+        (failure)  {
+          emit(CartOperationMessage(message: "product not added to cart"));
+        },
+        // The success case
+        (success) {
+          // If addition was successful, THEN fetch the updated list
+          emit(CartOperationMessage(message: "Product added to cart"));
 
-on<AddToCartEvent>(
-  (event, emit) async {
-    emit(CartLoadingState());
-    final result = await cartUsecase.addToCart(event.product);
-    result.fold(
-      (isLeft) {
-        emit(CartErrorState(errorMesage: isLeft.message));
-      }, (ifRight) async{
-        // get cart
-        final result = await cartUsecase.getCartItems();
-        result.fold(
-          (isLeft) {
-            emit(CartErrorState(errorMesage: isLeft.message));
-          }, (ifRight) {
-            emit(CartLoadedState(cartItems: ifRight));
-          }
-        );
-      }
-    );
-  }
-);
+        },
+      );
+    });
 
-on<RemoveCartEvent>(
-  (event, emit) async {
-    emit(CartLoadingState());
-    final result = await cartUsecase.removeFromCart(event.productId);
-    result.fold(
-      (isLeft) {
-        emit(CartErrorState(errorMesage: isLeft.message));
-      }, (ifRight) async {
-         final result = await cartUsecase.getCartItems();
-         result.fold(
-           (isLeft) {
-             emit(CartErrorState(errorMesage: isLeft.message));
-           }, (ifRight) {
-             emit(CartLoadedState(cartItems: ifRight));
-           }
-         );
-      }
-    );
-  }
-);
+on<RemoveCartEvent>((event, emit) async {
+      emit(CartLoadingState());
+
+      // First, await the result of removing the item
+      final removalResult = await cartUsecase.removeFromCart(
+        event.productId,
+      );
+
+      // Now, handle the result of the removal
+      removalResult.fold(
+        // The failure case
+        (failure)  {
+          emit(CartOperationMessage(message: "product not removed from cart"));
+        },
+        // The success case
+        (success) {
+          // If removal was successful, THEN fetch the updated list
+          emit(CartOperationMessage(message: "Product removed from cart"));
+          
+        },
+      );
+    });
 
   }
 }

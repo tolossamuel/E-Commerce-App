@@ -12,4 +12,5 @@ abstract class CartRepo {
   Future<Either<Failure, bool>> addToCartLocal(List<Map<String, int>> cartProducts);
   Future<Either<Failure, bool>> removeFromCartLocal(int itemId);
   Future<Either<Failure, List<CartEntity>>> getCartItemsLocal();
+  Future<double> getTotalPrice();
 }

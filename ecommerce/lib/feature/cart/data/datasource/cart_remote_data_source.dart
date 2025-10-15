@@ -31,7 +31,7 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource{
     try{
       final String url = "https://fakestoreapi.com/carts";
       final header = {"content-type": "application/json"};
-      final String userId = sharedPreferences.getString("userId") ?? "-1";
+      final int userId = sharedPreferences.getInt("userId") ?? -1;
       if (userId != "-1"){
         final body = {
           "userId" : userId,
@@ -43,6 +43,7 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource{
           headers: header,
           body: jsonEncode(body)
         );
+        
         if (response.statusCode == 200 || response.statusCode == 201){
           return const Right(true);
         }
@@ -59,9 +60,8 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource{
   @override
   Future<Either<Failure, List<CartEntity>>> getCartItems() async{
     try{
-      
-      final userId =  sharedPreferences.getString("userId")?? "1";
-      if (userId == "-1"){
+      final userId =  sharedPreferences.getInt("userId")?? -1;
+      if (userId == -1){
         return Left(UserNotFound(message: "User not found"));
       }
       final String url = "https://fakestoreapi.com/carts/user/$userId";
@@ -70,23 +70,21 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource{
         Uri.parse(url),
         headers: header,
       );
-     
       if(response.statusCode == 200 || response.statusCode == 201){
         final result = response.body;
+      
         final List<dynamic> jsonData = jsonDecode(result);
         final Map<String, int> cartCount = {};
         for (var cart in jsonData){
           final List<dynamic> products = cart["products"]??[];
+          
           for (var product in products){
             final productId = product["productId"];
             final quantity = product["quantity"];
             cartCount[productId.toString()] = cartCount.containsKey(productId.toString()) ? cartCount[productId.toString()]! + quantity : quantity;
           }
         }
-        
         final List<CartEntity> carItems = [];
-        // check if product in local storage
-        // save cartcount to local storage
         sharedPreferences.setString("cart_items", jsonEncode(cartCount));
         final jsonProduct =  sharedPreferences.getString("product");
         List<dynamic> products = [];
@@ -108,9 +106,11 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource{
         } else {
           products = jsonDecode(jsonProduct) as List;
         }
+        double totalPrice = 0.0;
         for (var product in products){
           final productId = product["id"];
           if (cartCount.containsKey(product["id"].toString())){
+            totalPrice += (product["price"].toDouble() * (cartCount[product["id"].toString()]??1));
             carItems.add(
               CartEntity(
                 id: productId,
@@ -119,13 +119,13 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource{
                 descr: product["description"],
                 image: product["image"],
                 catagory: product["category"],
-                quantity: cartCount[productId]??1,
+                quantity: cartCount[product["id"].toString()]??1,
                 rating: product["rating"]
               )
             );
           }
         }
-    
+        sharedPreferences.setDouble("total_price", totalPrice);
         return Right(carItems);
       }
       else {

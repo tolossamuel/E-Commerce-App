@@ -12,6 +12,7 @@ abstract class CartLocalDataSource {
   Future<Either<Failure, bool>> addToCart(List<Map<String,int>> cartProducts);
   Future<Either<Failure, bool>> removeFromCart(int itemId);
   Future<Either<Failure, List<CartEntity>>> getCartItems();
+  Future<double> getTotalPrice();
 }
 
 
@@ -26,7 +27,7 @@ class CartLocalDataSourceImpl extends CartLocalDataSource{
       for (var product in cartProducts){
         final productId = product["productId"]?? -1;
         final quantity = product["quantity"] ?? 0;
-        if (productId != -1 && quantity > 0) {
+        if (productId != -1) {
           cartMap[productId.toString()] = cartMap.containsKey(productId.toString()) ? cartMap[productId.toString()]! + quantity : quantity;
         }
       }
@@ -40,7 +41,6 @@ class CartLocalDataSourceImpl extends CartLocalDataSource{
   @override
   Future<Either<Failure, List<CartEntity>>> getCartItems() async{
     try{
-      
       final List<CartEntity> cartItems = [];
       final cartJson = sharedPreferences.getString("cart_items") ?? "{}";
       final cartMap = jsonDecode(cartJson) as Map<String, dynamic>;
@@ -50,11 +50,11 @@ class CartLocalDataSourceImpl extends CartLocalDataSource{
       }
       
       final productList = jsonDecode(jsonProduct) as List;
-      print(productList);
-      print(cartMap);
+      double totalPrice = 0.0;
       for (var product in productList) {
         final productId = product["id"].toString();
         if(cartMap.containsKey(productId)){
+          totalPrice += (product["price"].toDouble() * (cartMap[productId]??1));
           cartItems.add(
             CartEntity(
               id: product["id"],
@@ -70,6 +70,7 @@ class CartLocalDataSourceImpl extends CartLocalDataSource{
           );
         }
       }
+      sharedPreferences.setDouble("total_price", totalPrice);
       return Right(cartItems);
     } catch (e) {
       return Left(ServerFailure(message: "Failed to get cart items"));
@@ -79,7 +80,7 @@ class CartLocalDataSourceImpl extends CartLocalDataSource{
   @override
   Future<Either<Failure, bool>> removeFromCart(int itemId) async {
     try {
-      print(123);
+
       final cartJson = sharedPreferences.getString("cart_items") ?? "{}";
       final cartMap = jsonDecode(cartJson) as Map<String, dynamic>;
       if (cartMap.containsKey(itemId.toString())) {
@@ -89,6 +90,15 @@ class CartLocalDataSourceImpl extends CartLocalDataSource{
       return const Right(true);
     } catch (e) {
       return Left(ServerFailure(message: "Failed to remove from cart"));
+    }
+  }
+
+  Future<double> getTotalPrice() async {
+    try{
+      final totalPrice =  sharedPreferences.getDouble("total_price") ?? 0.0;
+      return totalPrice;
+    } catch (e) {
+      return 0.0;
     }
   }
 }

@@ -13,6 +13,7 @@ import 'package:ecommerce/feature/cart/domain/repo/cart_repo.dart';
 import 'package:ecommerce/feature/cart/domain/usecase/cart_usecase.dart';
 import 'package:ecommerce/feature/cart/presentation/state/cart/cart_bloc.dart';
 import 'package:ecommerce/feature/cart/presentation/state/cart/remote_cart_bloc.dart';
+import 'package:ecommerce/feature/cart/presentation/state/get_total_cubit.dart';
 import 'package:ecommerce/feature/home/data/datasource/home_data_source.dart';
 import 'package:ecommerce/feature/home/data/model/wishlist_model.dart';
 import 'package:ecommerce/feature/home/data/repo/home_repo_impl.dart';
@@ -70,5 +71,6 @@ locator.registerLazySingleton<Box<WishListModel>>(() => wishBox);
   locator.registerLazySingleton(() => CartUsecase(cartRepo: locator()));
   locator.registerLazySingleton(() => CartBloc(cartUsecase: locator()));
   locator.registerLazySingleton(() => RemoteCartBloc(cartUsecase: locator()));
+  locator.registerLazySingleton(() => GetTotalCubit(cartUsecase: locator()));
 
 }

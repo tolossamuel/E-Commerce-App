@@ -27,7 +27,7 @@ class ProductDisplayComponet extends StatelessWidget {
 
     return BlocListener<WithListBloc, WishListState>(
       listener: (context, state) {
-        print(state);
+    
         if (state is WishListSuccessMessage) {
           context.read<WishlistIdCubit>().fetchAllId();
         }
@@ -156,7 +156,7 @@ class ProductDisplayComponet extends StatelessWidget {
                                 width: widthSize(width, 375, 20),
                                 child: BlocBuilder<WithListBloc, WishListState>(
                                   builder: (context, state) {
-                                    print(sets);
+                            
                                     return IconButton(
                                       onPressed: () {
                                  

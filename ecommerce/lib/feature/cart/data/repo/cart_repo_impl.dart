@@ -61,6 +61,9 @@ class CartRepoImpl extends CartRepo {
   Future<Either<Failure, bool>> removeFromCartLocal(int itemId) async {
     return await cartLocalDataSource.removeFromCart(itemId);
   }
-
+  @override
+  Future<double> getTotalPrice() async {
+    return await cartLocalDataSource.getTotalPrice();
+  }
 
 }
