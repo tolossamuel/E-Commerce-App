@@ -57,7 +57,6 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource {
         return Left(ServerFailure(message: "Failed to add to cart"));
       }
     } on DioException catch (e) {
-      print(e);
       return Left(ServerFailure(
         message: e.response?.data?["message"] ?? e.message ?? "Failed to add to cart",
       ));
@@ -72,18 +71,15 @@ class CartRemoteDataSourceImpl extends CartRemoteDataSource {
       if (!await networkInfo.isConnected) {
         return Left(NetworkFailure(message: "No connection"));
       }
-      print(123);
 
       final userId = sharedPreferences.getInt("userId") ?? -1;
       if (userId == -1) {
         return Left(UserNotFound(message: "User not found"));
       }
-      print(userId);
       final response = await dio.get(
         '/carts/user/$userId',
         options: Options(headers: _headers),
       );
-      print(response.data);
       if (response.statusCode != 200 && response.statusCode != 201) {
         return Left(ServerFailure(message: "Failed to get cart items"));
       }

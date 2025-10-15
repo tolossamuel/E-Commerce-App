@@ -48,13 +48,11 @@ class AuthDataSourceImpl extends AuthDataSource {
   ) async {
     try {
       if (await networkInfo.isConnected) {
-        // Use relative URL since Dio baseUrl is already set
         final response = await dio.post(
           '/auth/login',
           data: {"username": userName, "password": password},
           options: Options(headers: {"Content-Type": "application/json"}),
         );
-
         if (response.statusCode == 200 || response.statusCode == 201) {
           // Check if user exists
           if (!await getUserId(userName)) {
@@ -74,16 +72,17 @@ class AuthDataSourceImpl extends AuthDataSource {
           return Left(UserNotFound(message: "User not found"));
         }
       } else {
+       
         return Left(NetworkFailure(message: "No connection"));
       }
-    } on DioException catch (e) {
+    } on DioException catch (_) {
       return Left(
         ServerFailure(
-          message: e.response?.data?["message"] ?? "Please try again",
+          message: "Please try again",
         ),
       );
     } catch (e) {
-      return Left(ServerFailure(message: "Please try again: $e"));
+      return Left(ServerFailure(message: "Please try again"));
     }
   }
 

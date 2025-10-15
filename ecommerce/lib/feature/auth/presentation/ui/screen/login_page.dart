@@ -155,7 +155,7 @@ class LoginPage extends StatelessWidget {
                         color: ConstColor.blackButton,
                         radies: widthSize(width, 375, 6),
                         onTap: () {
-                          if (authState is AuthLoaddingState) return;
+                          // if (authState is AuthLoaddingState) return;
                           context.read<AuthBloc>().add(LoginAuthEvent());
                         },
                         child: Center(
