@@ -5,7 +5,7 @@ import 'package:ecommerce/core/size/responsive_size.dart';
 import 'package:ecommerce/feature/cart/domain/entity/cart_entity.dart';
 import 'package:ecommerce/feature/cart/presentation/state/cart/cart_bloc.dart';
 import 'package:ecommerce/feature/cart/presentation/state/cart/cart_event.dart';
-import 'package:ecommerce/feature/cart/presentation/state/cart/remote_cart_bloc.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
