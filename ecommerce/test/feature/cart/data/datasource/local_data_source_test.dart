@@ -2,17 +2,11 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce/core/failure/failure.dart';
 import 'package:ecommerce/feature/cart/data/datasource/cart_local_data_source.dart';
-
 import 'package:ecommerce/feature/cart/domain/entity/cart_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../helper/test_helper.mocks.dart';
 
-
-@GenerateMocks([SharedPreferences])
 void main() {
   late CartLocalDataSourceImpl dataSource;
   late MockSharedPreferences mockSharedPreferences;
@@ -28,7 +22,7 @@ void main() {
       {"productId": 2, "quantity": 3},
     ];
 
-    test('should add products successfully to cart', () async {
+    test('✅ should add products successfully to cart', () async {
       // Arrange
       when(mockSharedPreferences.getString("cart_items"))
           .thenReturn(jsonEncode({}));
@@ -43,12 +37,15 @@ void main() {
       verify(mockSharedPreferences.setString("cart_items", any)).called(1);
     });
 
-    test('should return Left(ServerFailure) when exception occurs', () async {
+    test('❌ should return Left(ServerFailure) when exception occurs', () async {
+      // Arrange
       when(mockSharedPreferences.getString("cart_items"))
           .thenThrow(Exception("error"));
 
+      // Act
       final result = await dataSource.addToCart(cartProducts);
 
+      // Assert
       expect(result.isLeft(), true);
       expect(result.fold((l) => l, (_) => null), isA<ServerFailure>());
     });
@@ -77,12 +74,14 @@ void main() {
       }
     ];
 
-    test('should return Right(List<CartEntity>) when data found', () async {
+    test('✅ should return Right(List<CartEntity>) when data found', () async {
       // Arrange
       when(mockSharedPreferences.getString("cart_items"))
           .thenReturn(jsonEncode(cartItemsMap));
       when(mockSharedPreferences.getString("product"))
           .thenReturn(jsonEncode(productsList));
+      when(mockSharedPreferences.setDouble("total_price", any))
+          .thenAnswer((_) async => true);
 
       // Act
       final result = await dataSource.getCartItems();
@@ -94,9 +93,10 @@ void main() {
       expect(items.length, 2);
       expect(items.first.title, "Product 1");
       expect(items.first.quantity, 2);
+      verify(mockSharedPreferences.setDouble("total_price", any)).called(1);
     });
 
-    test('should return empty list when no products stored', () async {
+    test('🟡 should return empty list when no products stored', () async {
       when(mockSharedPreferences.getString("cart_items"))
           .thenReturn(jsonEncode(cartItemsMap));
       when(mockSharedPreferences.getString("product")).thenReturn(null);
@@ -108,7 +108,7 @@ void main() {
       expect(items, isEmpty);
     });
 
-    test('should return Left(ServerFailure) when decoding fails', () async {
+    test('❌ should return Left(ServerFailure) when decoding fails', () async {
       when(mockSharedPreferences.getString("cart_items"))
           .thenReturn("invalid_json");
 
@@ -122,7 +122,7 @@ void main() {
   group('removeFromCart', () {
     final cartItems = {"1": 2, "2": 3};
 
-    test('should remove item successfully', () async {
+    test('✅ should remove item successfully', () async {
       when(mockSharedPreferences.getString("cart_items"))
           .thenReturn(jsonEncode(cartItems));
       when(mockSharedPreferences.setString(any, any))
@@ -134,7 +134,7 @@ void main() {
       verify(mockSharedPreferences.setString("cart_items", any)).called(1);
     });
 
-    test('should return Left(ServerFailure) when exception occurs', () async {
+    test('❌ should return Left(ServerFailure) when exception occurs', () async {
       when(mockSharedPreferences.getString("cart_items"))
           .thenThrow(Exception("error"));
 
@@ -142,6 +142,26 @@ void main() {
 
       expect(result.isLeft(), true);
       expect(result.fold((l) => l, (_) => null), isA<ServerFailure>());
+    });
+  });
+
+  group('getTotalPrice', () {
+    test('✅ should return stored total price', () async {
+      when(mockSharedPreferences.getDouble("total_price")).thenReturn(99.9);
+
+      final result = await dataSource.getTotalPrice();
+
+      expect(result, 99.9);
+      verify(mockSharedPreferences.getDouble("total_price")).called(1);
+    });
+
+    test('🟡 should return 0.0 when exception occurs', () async {
+      when(mockSharedPreferences.getDouble("total_price"))
+          .thenThrow(Exception("error"));
+
+      final result = await dataSource.getTotalPrice();
+
+      expect(result, 0.0);
     });
   });
 }

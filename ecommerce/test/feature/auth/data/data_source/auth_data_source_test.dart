@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:ecommerce/core/failure/failure.dart';
-import 'package:ecommerce/core/network_checker/network_checker.dart';
+
 import 'package:ecommerce/feature/auth/data/data_source/auth_data_source.dart';
-import 'package:ecommerce/feature/auth/domain/entity/auth_entity.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

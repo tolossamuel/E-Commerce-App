@@ -68,7 +68,7 @@ locator.registerLazySingleton(() => dio);
 
 locator.registerLazySingleton<Box<WishListModel>>(() => wishBox);
 
-  locator.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(sharedPreferences: locator(), networkInfo: locator(), client: locator(), wishBox: locator()));
+  locator.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(sharedPreferences: locator(), networkInfo: locator(), dio: locator(), wishBox: locator()));
   locator.registerLazySingleton<HomeRepo>(()=> HomeRepoImpl(homeDataSource: locator()));
   locator.registerLazySingleton(() => HomeUsecase(homeRepo: locator()));
   locator.registerLazySingleton(() => ProductBloc(homeUsecase: locator()));
@@ -78,7 +78,7 @@ locator.registerLazySingleton<Box<WishListModel>>(() => wishBox);
 
   // cart
   locator.registerLazySingleton<CartLocalDataSource>(() => CartLocalDataSourceImpl(sharedPreferences: locator()));
-  locator.registerLazySingleton<CartRemoteDataSource>(() => CartRemoteDataSourceImpl(sharedPreferences: locator(), networkInfo: locator(), client: locator()));
+  locator.registerLazySingleton<CartRemoteDataSource>(() => CartRemoteDataSourceImpl(sharedPreferences: locator(), networkInfo: locator(), dio: locator()));
   locator.registerLazySingleton<CartRepo>(() => CartRepoImpl(networkInfo: locator(),cartLocalDataSource: locator(), cartRemoteDataSource: locator()));
   locator.registerLazySingleton(() => CartUsecase(cartRepo: locator()));
   locator.registerLazySingleton(() => CartBloc(cartUsecase: locator()));

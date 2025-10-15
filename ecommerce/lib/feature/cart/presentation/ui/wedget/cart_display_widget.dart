@@ -144,10 +144,7 @@ class CartDisplayWidget extends StatelessWidget {
                                   "productId": cartEntity.id,
                                   "quantity": 1
                                 }]));
-                                context.read<RemoteCartBloc>().add(AddToCartEvent(product: [{
-                                  "productId": cartEntity.id,
-                                  "quantity": 1
-                                }]));
+                                
                               },
                           child: Container(
                             width: widthSize(width, 375, 40),
