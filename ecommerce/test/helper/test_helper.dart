@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:ecommerce/core/network_checker/network_checker.dart';
 import 'package:ecommerce/feature/auth/data/data_source/auth_data_source.dart';
 import 'package:ecommerce/feature/auth/domain/repo/auth_repo.dart';
@@ -23,7 +24,8 @@ import 'package:shared_preferences/shared_preferences.dart';
     HomeDataSource,
     CartRepo,
     CartLocalDataSource,
-    CartRemoteDataSource
+    CartRemoteDataSource,
+    Dio
   ]
 )
 @GenerateMocks([

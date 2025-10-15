@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:ecommerce/core/failure/failure.dart';
 import 'package:ecommerce/core/network_checker/network_checker.dart';
 import 'package:ecommerce/feature/auth/data/model/auth_model.dart';
@@ -19,10 +20,12 @@ class AuthDataSourceImpl extends AuthDataSource {
   final SharedPreferences sharedPreferences;
   final NetworkInfo networkInfo;
   final http.Client client;
+  final Dio dio;
   AuthDataSourceImpl({
     required this.sharedPreferences,
     required this.networkInfo,
     required this.client,
+    required this.dio,
   });
   @override
   Future<Either<Failure, AuthEntity>> isLoggin() async {
@@ -34,7 +37,7 @@ class AuthDataSourceImpl extends AuthDataSource {
       }
       return Left(UserNotFound(message: "user not found"));
     } on Exception catch (e) {
-      return Left(ServerFailure(message:e.toString()));
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 
@@ -45,38 +48,42 @@ class AuthDataSourceImpl extends AuthDataSource {
   ) async {
     try {
       if (await networkInfo.isConnected) {
-        final String url = "https://fakestoreapi.com/auth/login";
-        final headers = {'Content-Type': 'application/json'};
-        final body = jsonEncode({"username": userName, "password": password});
-        final response = await http.post(
-          Uri.parse(url),
-          headers: headers,
-          body: body,
+        // Use relative URL since Dio baseUrl is already set
+        final response = await dio.post(
+          '/auth/login',
+          data: {"username": userName, "password": password},
+          options: Options(headers: {"Content-Type": "application/json"}),
         );
-        
+
         if (response.statusCode == 200 || response.statusCode == 201) {
-          if (!await getUserId(userName)){
-            return left(UserNotFound(message: "user not found"));
+          // Check if user exists
+          if (!await getUserId(userName)) {
+            return Left(UserNotFound(message: "User not found"));
           }
-          final result = response.body;
-          final jsonData = jsonDecode(result);
-        
-          final dynamic userData = {
-            "token": jsonData["token"] ?? "",
-            "userName": userName,
-          };
-          final AuthModel authModel = AuthModel.fromJson(userData);
-          final AuthEntity authEntity = authModel.toEntity();
+
+          final data = response.data;
+
+          final userData = {"token": data["token"] ?? "", "userName": userName};
+
+          final authModel = AuthModel.fromJson(userData);
+          final authEntity = authModel.toEntity();
+
           await sharedPreferences.setString("user", jsonEncode(userData));
           return Right(authEntity);
         } else {
-          return left(UserNotFound(message:"user not found"));
+          return Left(UserNotFound(message: "User not found"));
         }
       } else {
-        return left(NetworkFailure(message:"no connection"));
+        return Left(NetworkFailure(message: "No connection"));
       }
+    } on DioException catch (e) {
+      return Left(
+        ServerFailure(
+          message: e.response?.data?["message"] ?? "Please try again",
+        ),
+      );
     } catch (e) {
-      return left(ServerFailure(message:"please try again $e"));
+      return Left(ServerFailure(message: "Please try again: $e"));
     }
   }
 
@@ -89,21 +96,20 @@ class AuthDataSourceImpl extends AuthDataSource {
       return left(ServerFailure(message: "please try again"));
     }
   }
-  
+
   @override
   Future<bool> getUserId(String userName) async {
-    try{
-      final String url = "https://fakestoreapi.com/users";
-      final headers = {'Content-Type': 'application/json'};
-      final response = await http.get(
-        Uri.parse(url),
-        headers: headers,
+    try {
+      // Use relative URL since baseUrl is already set
+      final response = await dio.get(
+        '/users',
+        options: Options(headers: {"Content-Type": "application/json"}),
       );
-      if (response.statusCode == 200 || response.statusCode == 201){
-        final result = response.body;
-        final List<dynamic> jsonData = jsonDecode(result);
-        for (var user in jsonData){
-          if (user["username"] == userName){
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final List<dynamic> users = response.data;
+        for (var user in users) {
+          if (user["username"] == userName) {
             await sharedPreferences.setInt("userId", user["id"]);
             return true;
           }
@@ -111,7 +117,9 @@ class AuthDataSourceImpl extends AuthDataSource {
         return false;
       }
       return false;
-    } catch (e){
+    } on DioException catch (_) {
+      return false;
+    } catch (_) {
       return false;
     }
   }

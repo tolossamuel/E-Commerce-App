@@ -177,4 +177,13 @@ class MockCartLocalDataSource extends _i1.Mock
           ),
         )),
       ) as _i4.Future<_i2.Either<_i6.Failure, List<_i7.CartEntity>>>);
+
+  @override
+  _i4.Future<double> getTotalPrice() => (super.noSuchMethod(
+        Invocation.method(
+          #getTotalPrice,
+          [],
+        ),
+        returnValue: _i4.Future<double>.value(0.0),
+      ) as _i4.Future<double>);
 }

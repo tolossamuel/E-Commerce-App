@@ -1,5 +1,6 @@
 
 
+import 'package:dio/dio.dart';
 import 'package:ecommerce/core/network_checker/network_checker.dart';
 import 'package:ecommerce/feature/auth/data/data_source/auth_data_source.dart';
 import 'package:ecommerce/feature/auth/data/repo/auth_repo_impl.dart';
@@ -40,9 +41,20 @@ Future<void> setUpLocator() async {
   locator.registerLazySingleton(() => sharedPreferences);
   locator.registerLazySingleton(() => connectionChecker);
   locator.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(connectionChecker: locator()));
-
+  final dio = Dio(
+  BaseOptions(
+    baseUrl: 'https://fakestoreapi.com',
+    connectTimeout: const Duration(seconds: 5),
+    receiveTimeout: const Duration(seconds: 5),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  ),
+);
+locator.registerLazySingleton(() => dio);
   //  ================ Auth =======================
-  locator.registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(sharedPreferences: locator(), networkInfo: locator(), client: locator()));
+  locator.registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(
+    sharedPreferences: locator(), networkInfo: locator(), client: locator(), dio: locator()));
   locator.registerLazySingleton<AuthRepo>(() => AuthRepoImpl(authDataSource: locator()));
   locator.registerLazySingleton(()=> AuthUsercase(authRepo: locator()));
   locator.registerLazySingleton( () => AuthBloc(authUsercase: locator()));
